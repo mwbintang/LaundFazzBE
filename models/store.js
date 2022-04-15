@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Store.belongsToMany(models.Customer, { through: models.Transaction });
+      Store.belongsToMany(models.Customer, { through: models.Transaction });//! Error
     }
   }
   Store.init(

@@ -4,7 +4,8 @@ class Controller {
   static async addTransaction(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const { CustomerId, StoreId, pickupDate, location } = req.body;
+      const { StoreId, pickupDate, location } = req.body;
+      const { CustomerId } = req.customer;
       let newTransaction = await Transaction.create(
         {
           CustomerId,
@@ -27,6 +28,22 @@ class Controller {
     try {
       const transactions = await Transaction.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      res.status(200).json(transactions);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getCustTransactions(req, res, next) {
+    try {
+      const { CustomerId } = req.customer;
+      const transactions = await Transaction.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        where: {
+          CustomerId,
+        },
       });
 
       res.status(200).json(transactions);
@@ -58,7 +75,7 @@ class Controller {
   static async editTransaction(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const { pickupDate, deliveryDate, location, status, isPaid } = req.body;
+      const { pickupDate, deliveryDate, status, isPaid } = req.body;
       const { transactionId } = req.params;
 
       const transaction = await Transaction.findByPk(transactionId);
@@ -71,7 +88,6 @@ class Controller {
         {
           pickupDate,
           deliveryDate,
-          location,
           status,
           isPaid,
         },

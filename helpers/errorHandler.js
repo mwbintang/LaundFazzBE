@@ -30,10 +30,13 @@ function errorHandler(err, req, res, next) {
       res.status(401).json({ Error: "Invalid token or store" });
       break;
     case "storeAuthz Failed":
-      res.status(403).json({ Error: "Forbidden to modify item" });
+      res.status(403).json({ Error: "Forbidden to modify or read item" });
       break;
     case "customerAuthz Failed":
-      res.status(403).json({ Error: "Forbidden to modify item" });
+      res.status(403).json({ Error: "Forbidden to modify or read item" });
+      break;
+    case "custTransactionAuthz Failed":
+      res.status(403).json({ Error: "Forbidden to modify or read item" });
       break;
     case "customerNotFound":
       res.status(404).json({ Error: "Customer not found" });
