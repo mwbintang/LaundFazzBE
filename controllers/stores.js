@@ -69,14 +69,14 @@ class Controller {
     try {
       const { StoreId } = req.store;
       const store = await Store.findOne({
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         where: {
           id: StoreId,
         },
       });
       if (!store) {
         throw {
-          name: "customerNotFound",
+          name: "storeNotFound",
         };
       }
       res.status(200).json(store);

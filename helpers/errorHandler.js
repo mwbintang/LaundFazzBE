@@ -35,6 +35,27 @@ function errorHandler(err, req, res, next) {
     case "customerAuthz Failed":
       res.status(403).json({ Error: "Forbidden to modify item" });
       break;
+    case "customerNotFound":
+      res.status(404).json({ Error: "Customer not found" });
+      break;
+    case "storeNotFound":
+      res.status(404).json({ Error: "Store not found" });
+      break;
+    case "transactionNotFound":
+      res.status(404).json({ Error: "Transaction not found" });
+      break;
+    case "custLogin Failed":
+      res.status(401).json({ Error: "Wrong customer email or password" });
+      break;
+    case "custLogin noInput":
+      res.status(401).json({ Error: "Email and Password is required" });
+      break;
+    case "storeLogin Failed":
+      res.status(401).json({ Error: "Wrong store email or password" });
+      break;
+    case "storeLogin noInput":
+      res.status(401).json({ Error: "Email and Password is required" });
+      break;
     default:
       res.status(500).json({ Error: "Internal server error" });
       break;

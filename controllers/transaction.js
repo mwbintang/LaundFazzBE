@@ -60,7 +60,14 @@ class Controller {
     try {
       const { pickupDate, deliveryDate, location, status, isPaid } = req.body;
       const { transactionId } = req.params;
-      let transaction = await Transaction.create(
+
+      const transaction = await Transaction.findByPk(transactionId);
+
+      if (!transaction) {
+        throw { name: "transactionNotFound" };
+      }
+
+      let newTransaction = await Transaction.create(
         {
           pickupDate,
           deliveryDate,
@@ -80,7 +87,7 @@ class Controller {
       await t.commit();
       res.status(200).json({
         message: "Transaction updated",
-        transaction: transaction[1][0],
+        transaction: newTransaction[1][0],
       });
     } catch (error) {
       await t.rollback();
@@ -93,10 +100,10 @@ class Controller {
     try {
       const { transactionId } = req.params;
 
-      const transaction = await Transaction.findByPk(transactionId)
+      const transaction = await Transaction.findByPk(transactionId);
 
       if (!transaction) {
-        throw {name : "transactionNotFound"}
+        throw { name: "transactionNotFound" };
       }
 
       await Transaction.destroy({
