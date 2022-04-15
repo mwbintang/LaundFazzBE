@@ -85,7 +85,7 @@ class Controller {
     }
   }
 
-  static async deleteUser(req, res, next) {
+  static async deleteStore(req, res, next) {
     const t = await sequelize.transaction();
     try {
       const { StoreId } = req.store;
