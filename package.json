@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mon": "npx nodemon bin/www.js",
+    "testdb": "npx sequelize-cli --env=test db:drop && npx sequelize-cli --env=test db:create && npx sequelize-cli --env=test db:migrate && npx sequelize-cli --env=test db:seed:all",
+    "test": "npx jest customer.test.js --detectOpenHandles --forceExit --runInBand"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,8 @@
   "homepage": "https://github.com/imramzani/LaundFazzBE#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "create-react-app": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.7.3",
@@ -28,6 +31,9 @@
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.4.1"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.2"
   }
 }

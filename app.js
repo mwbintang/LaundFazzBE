@@ -1,24 +1,23 @@
-const express = require("express")
+if (process.env.NODE_ENV === "development") {
+  require("dotenv").config();
+}
+const express = require("express");
+const errorHandler = require("./helpers/errorHandler");
+const app = express();
+const cors = require('cors')
+const routes = require('./routes')
+const UserRouter = require('./routes/userRouter')
+const errorHandler = require('./middleware/errorHandler')
+
 const http = require("http")
-const app = require("express")()
-const cors = require("cors")
 const { Server } = require("socket.io")
 const PORT = 3000
 
 app.use(cors())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const server = http.createServer(app)
-
-// const io = require("socket.io")(httpServer, {
-//   cors: {
-//     origin: "*",
-//     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-//     preflightContinue: false,
-//     optionsSuccessStatus: 204
-//   }
-// });
 
 const io = new Server(server, {
   cors: {
@@ -54,3 +53,12 @@ io.on("connection", (socket) => {
 server.listen(PORT, () => {
   console.log(`server on port ${PORT}`)
 })
+
+app.use('/users', UserRouter)
+//app.use(errorHandler) bintang
+app.use("/", routes)
+
+app.use(errorHandler) //mas steven
+
+module.exports = app
+
