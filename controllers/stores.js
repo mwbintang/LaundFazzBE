@@ -1,6 +1,10 @@
 const { Store } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { compare } = require("../helpers/bcrypt");
+const {
+  sequelize,
+  Sequelize: { Op },
+} = require("../models");
 
 class Controller {
   static async register(req, res, next) {

@@ -9,7 +9,7 @@ let authentication = async (req, res, next) => {
     const store = await Store.findByPk(payload.StoreId);
     if (!store) {
       throw {
-        name: `storeAuthc Fail`,
+        name: `storeAuthc Failed`,
       };
     }
 

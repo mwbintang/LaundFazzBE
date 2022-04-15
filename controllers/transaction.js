@@ -1,4 +1,8 @@
 const { Transaction } = require("../models");
+const {
+  sequelize,
+  Sequelize: { Op },
+} = require("../models");
 
 class Controller {
   static async addTransaction(req, res, next) {
@@ -10,7 +14,7 @@ class Controller {
         {
           CustomerId,
           StoreId,
-          pickupDate,
+          pickupDate: new Date(),
           location,
         },
         { transaction: t }
@@ -84,7 +88,7 @@ class Controller {
         throw { name: "transactionNotFound" };
       }
 
-      let newTransaction = await Transaction.create(
+      let newTransaction = await Transaction.update(
         {
           pickupDate,
           deliveryDate,

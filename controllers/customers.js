@@ -1,6 +1,10 @@
 const { Customer } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { compare } = require("../helpers/bcrypt");
+const {
+  sequelize,
+  Sequelize: { Op },
+} = require("../models");
 
 class Controller {
   static async register(req, res, next) {
@@ -70,7 +74,7 @@ class Controller {
     try {
       const { CustomerId } = req.customer;
       const customer = await Customer.findOne({
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
         where: {
           id: CustomerId,
         },

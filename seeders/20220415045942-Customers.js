@@ -1,5 +1,6 @@
 "use strict";
 const fs = require("fs");
+const { hash } = require("../helpers/bcrypt");
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -14,6 +15,7 @@ module.exports = {
      */
     let data = JSON.parse(fs.readFileSync("./data/customers.json"));
     data.forEach((el) => {
+      el.password = hash(el.password)
       el.createdAt = new Date();
       el.updatedAt = new Date();
     });
