@@ -1,58 +1,70 @@
-const {User} = require('../models')
+const { User } = require('../models')
 const { transporter } = require('../helper/nodemailer')
-const {compare} = require('../helper/bcrypt')
-const {signJWT} = require('../helper/jwt')
+const { compare } = require('../helper/bcrypt')
+const { signJWT } = require('../helper/jwt')
+const client = require('../helper/twilio')
 
-class UserController{
-    static async register(req, res, next){
+class UserController {
+    static async register(req, res, next) {
         try {
-            const {email, password} = req.body
-            const data = await User.create({email, password})
+            const { email, password } = req.body
+            const data = await User.create({ email, password })
             let mailOptions = {
                 from: "testinghaloprof@gmail.com",
                 to: `${email}`,
                 subject: "Laundry Fazz",
                 text: `Telah register di Laundry Fazz.`,
             };
-            
+
             transporter.sendMail(mailOptions, (err, info) => {
                 if (err) {
-                    throw ({name:'nodemailer error'})
+                    throw ({ name: 'nodemailer error' })
                 } else {
                     console.log("Email Sent:" + info.response);
                 }
             });
+            console.log(client,'ccccccccc')
+            client.messages
+                .create({
+                    from: 'whatsapp:+14155238886',
+                    body: 'kalo masuk chat',
+                    to: 'whatsapp:+6282139987938'
+                })
+                .then(message => console.log(message.sid))
+                .catch(err=>{
+                    console.log(err,'error')
+                })
             res.status(200).json(data)
 
         } catch (error) {
             next(error)
         }
     }
-    static async login(req, res, next){
+    static async login(req, res, next) {
         try {
-            const {email, password} = req.body
-            if(!email || !password){
-                throw({name:'wrong email/password'})
+            const { email, password } = req.body
+            if (!email || !password) {
+                throw ({ name: 'wrong email/password' })
             }
-            let emailSearch = await User.findOne({where:{email}})
-            if(!emailSearch){
-                throw ({name:'email/password not valid'})
+            let emailSearch = await User.findOne({ where: { email } })
+            if (!emailSearch) {
+                throw ({ name: 'email/password not valid' })
             }
             let comaparePass = compare(password, emailSearch.password)
-            if(!comaparePass){
-                throw ({name:'wrong email/password'})
+            if (!comaparePass) {
+                throw ({ name: 'wrong email/password' })
             }
             let access_token = signJWT({
                 id: emailSearch.id,
                 role: emailSearch.role
             })
-            res.status(200).json({access_token})
+            res.status(200).json({ access_token })
 
         } catch (error) {
             next(error)
         }
     }
-    static async list(req, res, next){
+    static async list(req, res, next) {
         try {
             const data = await User.findAll()
             res.status(200).json(data)
