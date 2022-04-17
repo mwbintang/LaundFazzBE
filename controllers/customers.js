@@ -24,20 +24,27 @@ class Controller {
       );
 
       await t.commit();
+
       let mailOptions = {
         from: "testinghaloprof@gmail.com",
-        to: `${email}`,
+        to: `bintangmuhammadwahid@gmail.com`,
         subject: "Laundry Fazz",
         text: `Telah register di Laundry Fazz.`,
+        template:'email',
+        context:{
+          text:'jembut'
+        }
       };
 
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
+          console.log(err,'vvvv')
           throw ({ name: 'nodemailer error' })
         } else {
           console.log("Email Sent:" + info.response);
         }
       });
+
       res.status(201).json(newCustomer);
     } catch (error) {
       await t.rollback();
