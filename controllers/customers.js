@@ -1,3 +1,4 @@
+const { transporter } = require('../helpers/nodemailer')
 const { Customer } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { compare } = require("../helpers/bcrypt");
@@ -23,6 +24,20 @@ class Controller {
       );
 
       await t.commit();
+      let mailOptions = {
+        from: "testinghaloprof@gmail.com",
+        to: `${email}`,
+        subject: "Laundry Fazz",
+        text: `Telah register di Laundry Fazz.`,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          throw ({ name: 'nodemailer error' })
+        } else {
+          console.log("Email Sent:" + info.response);
+        }
+      });
       res.status(201).json(newCustomer);
     } catch (error) {
       await t.rollback();

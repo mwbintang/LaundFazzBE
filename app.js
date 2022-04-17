@@ -3,22 +3,18 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const express = require("express");
-const errorHandler = require("./helpers/errorHandler");
+const errorHandler = require("./middlewares/errorHandler");
 const app = express();
 const cors = require('cors')
 const routes = require('./routes')
-const UserRouter = require('./routes/userRouter')
-const errorHandler = require('./middleware/errorHandler')
 
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', UserRouter)
-//app.use(errorHandler) bintang
 app.use("/", routes)
 
-app.use(errorHandler) //mas steven
+app.use(errorHandler)
 
 module.exports = app
 
